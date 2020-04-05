@@ -56,6 +56,10 @@ function KnownDrugs() {
         property !== sort.sortBy ? 'asc' :
           sort.direction === 'asc' ? 'desc' : 'asc'
     });
+
+    if (property !== sort.sortBy) {
+      setPageIndex(0);
+    }
   };
 
   return (
