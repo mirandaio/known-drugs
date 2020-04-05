@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 
 const KNOWN_DRUGS_QUERY = gql`
@@ -35,10 +36,11 @@ const NUM_ROWS = 10;
 
 function KnownDrugs() {
   const [ pageIndex, setPageIndex ] = useState(0);
+  const [ sort, setSort ] = useState({ sortBy: 'disease', direction: 'asc' });
   const { loading, error, data } = useQuery(KNOWN_DRUGS_QUERY, {
     variables: {
       page: {index: pageIndex, size: NUM_ROWS },
-      sort: { sortBy: 'disease', direction: 'asc' },
+      sort,
       filters: { disease: 'breast' }
     }
   });
@@ -47,19 +49,92 @@ function KnownDrugs() {
 
   const { rows, aggregations } = data.knownDrugs;
 
+  const createSortHandler = property => () => {
+    setSort({
+      sortBy: property,
+      direction:
+        property !== sort.sortBy ? 'asc' :
+          sort.direction === 'asc' ? 'desc' : 'asc'
+    });
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Disease</TableCell>
-            <TableCell>Phase</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Source</TableCell>
-            <TableCell>Drug</TableCell>
-            <TableCell>Type</TableCell>
-            <TableCell>Mechanism of Action</TableCell>
-            <TableCell>Activity</TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={sort.sortBy === 'disease'}
+                direction={sort.direction}
+                onClick={createSortHandler('disease')}
+              >
+                Disease
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={sort.sortBy === 'phase'}
+                direction={sort.direction}
+                onClick={createSortHandler('phase')}
+              >
+                Phase
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={sort.sortBy === 'status'}
+                direction={sort.direction}
+                onClick={createSortHandler('status')}
+              >
+                Status
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={sort.sortBy === 'source'}
+                direction={sort.direction}
+                onClick={createSortHandler('source')}
+              >
+                Source
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={sort.sortBy === 'drug'}
+                direction={sort.direction}
+                onClick={createSortHandler('drug')}
+              >
+                Drug
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={sort.sortBy === 'type'}
+                direction={sort.direction}
+                onClick={createSortHandler('type')}
+              >
+                Type
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={sort.sortBy === 'mechanism'}
+                direction={sort.direction}
+                onClick={createSortHandler('mechanism')}
+              >
+                Mechanism of Action
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
+                active={sort.sortBy === 'activity'}
+                direction={sort.direction}
+                onClick={createSortHandler('activity')}
+              >
+                Activity
+              </TableSortLabel>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
