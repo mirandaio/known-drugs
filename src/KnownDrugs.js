@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,46 +6,19 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
-
-const KNOWN_DRUGS_QUERY = gql`
-  query KnownDrugs($page: Pagination! $sort: SortInput! $filters: Filters!) {
-    knownDrugs(page: $page sort: $sort filters: $filters) {
-      aggregations {
-        total
-      }
-      rows {
-        disease
-        phase
-        status
-        source
-        drug
-        type
-        mechanism
-        activity
-      }
-    }
-  }
-`;
+import KnownDrugsBody from './KnownDrugsBody';
+import KnownDrugsFooter from './KnownDrugsFooter';
 
 const NUM_ROWS = 10;
 
 function KnownDrugs() {
   const [ pageIndex, setPageIndex ] = useState(0);
   const [ sort, setSort ] = useState({ sortBy: 'disease', direction: 'asc' });
-  const { loading, error, data } = useQuery(KNOWN_DRUGS_QUERY, {
-    variables: {
-      page: {index: pageIndex, size: NUM_ROWS },
-      sort,
-      filters: { disease: 'breast' }
-    }
+  const [ filters, setFilters ] = useState({
+    disease: ''
   });
-
-  if (loading || error) return null;
-
-  const { rows, aggregations } = data.knownDrugs;
 
   const createSortHandler = property => () => {
     setSort({
@@ -62,6 +33,17 @@ function KnownDrugs() {
     }
   };
 
+  const handleDiseaseFilter = (e) => {
+    setFilters({
+      ...filters,
+      disease: e.target.value
+    });
+  };
+
+  const handleChangePage = page => {
+    setPageIndex(page);
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table size="small">
@@ -69,7 +51,7 @@ function KnownDrugs() {
           <TableRow>
             <TableCell>
               <TableSortLabel
-                active={sort.sortBy === 'disease'}
+               active={sort.sortBy === 'disease'}
                 direction={sort.direction}
                 onClick={createSortHandler('disease')}
               >
@@ -140,33 +122,37 @@ function KnownDrugs() {
               </TableSortLabel>
             </TableCell>
           </TableRow>
+          <TableRow>
+            <TableCell>
+              <input
+                type="text"
+                value={filters.disease}
+                onChange={handleDiseaseFilter}
+              />
+            </TableCell>
+            <TableCell><input type="text"/></TableCell>
+            <TableCell><input type="text"/></TableCell>
+            <TableCell><input type="text"/></TableCell>
+            <TableCell><input type="text"/></TableCell>
+            <TableCell><input type="text"/></TableCell>
+            <TableCell><input type="text"/></TableCell>
+            <TableCell><input type="text"/></TableCell>
+          </TableRow>
         </TableHead>
         <TableBody>
-        {
-          rows.map((row, i) => {
-            return (
-              <TableRow key={i}>
-                <TableCell>{row.disease}</TableCell>
-                <TableCell>{row.phase}</TableCell>
-                <TableCell>{row.status}</TableCell>
-                <TableCell>{row.source}</TableCell>
-                <TableCell>{row.drug}</TableCell>
-                <TableCell>{row.type}</TableCell>
-                <TableCell>{row.mechanism}</TableCell>
-                <TableCell>{row.activity}</TableCell>
-              </TableRow>
-            );
-          })
-        }
+          <KnownDrugsBody
+            pageIndex={pageIndex}
+            sort={sort}
+            filters={filters}
+            size={NUM_ROWS}
+          />
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TablePagination
-              page={pageIndex}
-              count={aggregations.total}
-              rowsPerPage={NUM_ROWS}
-              rowsPerPageOptions={[]}
-              onChangePage={(_, page) => setPageIndex(page)}
+            <KnownDrugsFooter
+              pageIndex={pageIndex}
+              size={NUM_ROWS}
+              onChangePage={handleChangePage}
             />
           </TableRow>
         </TableFooter>
