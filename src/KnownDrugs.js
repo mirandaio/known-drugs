@@ -240,6 +240,7 @@ function KnownDrugs() {
             <KnownDrugsFooter
               pageIndex={pageIndex}
               size={NUM_ROWS}
+              filters={filters}
               onChangePage={handleChangePage}
             />
           </TableRow>

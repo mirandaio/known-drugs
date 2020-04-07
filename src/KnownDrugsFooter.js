@@ -4,8 +4,8 @@ import gql from 'graphql-tag';
 import TablePagination from '@material-ui/core/TablePagination';
 
 const TOTAL_QUERY = gql`
-  query Total {
-    knownDrugs {
+  query Total($filters: Filters!) {
+    knownDrugs(filters: $filters) {
       aggregations {
         total
       }
@@ -13,8 +13,12 @@ const TOTAL_QUERY = gql`
   }
 `;
 
-const KnownDrugsFooter = ({ pageIndex, size, onChangePage }) => {
-  const { loading, error, data } = useQuery(TOTAL_QUERY);
+const KnownDrugsFooter = ({ pageIndex, size, filters, onChangePage }) => {
+  const { loading, error, data } = useQuery(TOTAL_QUERY, {
+    variables: {
+      filters
+    }
+  });
 
   if (loading || error) return null;
 
