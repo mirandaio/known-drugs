@@ -4,7 +4,6 @@ import gql from 'graphql-tag';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-
 const KNOWN_DRUGS_QUERY = gql`
   query KnownDrugs($page: Pagination! $sort: SortInput! $filters: Filters!) {
     knownDrugs(page: $page sort: $sort filters: $filters) {

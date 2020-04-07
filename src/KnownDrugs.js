@@ -16,9 +16,17 @@ const NUM_ROWS = 10;
 function KnownDrugs() {
   const [ pageIndex, setPageIndex ] = useState(0);
   const [ sort, setSort ] = useState({ sortBy: 'disease', direction: 'asc' });
-  const [ filters, setFilters ] = useState({
-    disease: ''
+  const [ filterStrings, setFilterStrings ] = useState({
+    disease: '',
+    phase: '',
+    status: '',
+    source: '',
+    drug: '',
+    type: '',
+    mechanism: '',
+    activity: ''
   });
+  const [ filters, setFilters ] = useState({});
 
   const createSortHandler = property => () => {
     setSort({
@@ -33,10 +41,25 @@ function KnownDrugs() {
     }
   };
 
-  const handleDiseaseFilter = (e) => {
-    setFilters({
-      ...filters,
-      disease: e.target.value
+  const createFilterHandler = property => e => {
+    if (e.key === 'Enter') {
+      const newFilters = {
+        ...filters,
+        [property]: filterStrings[property]
+      };
+
+      if (newFilters[property] === '') {
+        delete newFilters[property];
+      }
+
+      setFilters(newFilters);
+    }
+  };
+
+  const createFilterStringHandler = property => e => {
+    setFilterStrings({
+      ...filterStrings,
+      [property]: e.target.value
     });
   };
 
@@ -126,17 +149,67 @@ function KnownDrugs() {
             <TableCell>
               <input
                 type="text"
-                value={filters.disease}
-                onChange={handleDiseaseFilter}
+                value={filterStrings.disease}
+                onChange={createFilterStringHandler('disease')}
+                onKeyDown={createFilterHandler('disease')}
               />
             </TableCell>
-            <TableCell><input type="text"/></TableCell>
-            <TableCell><input type="text"/></TableCell>
-            <TableCell><input type="text"/></TableCell>
-            <TableCell><input type="text"/></TableCell>
-            <TableCell><input type="text"/></TableCell>
-            <TableCell><input type="text"/></TableCell>
-            <TableCell><input type="text"/></TableCell>
+            <TableCell>
+              <input
+                type="text"
+                value={filterStrings.phase}
+                onChange={createFilterStringHandler('phase')}
+                onKeyDown={createFilterHandler('phase')}
+              />
+            </TableCell>
+            <TableCell>
+              <input
+                type="text"
+                value={filterStrings.status}
+                onChange={createFilterStringHandler('status')}
+                onKeyDown={createFilterHandler('status')}
+              />
+            </TableCell>
+            <TableCell>
+              <input
+                type="text"
+                value={filterStrings.source}
+                onChange={createFilterStringHandler('source')}
+                onKeyDown={createFilterHandler('source')}
+              />
+            </TableCell>
+            <TableCell>
+              <input
+                type="text"
+                value={filterStrings.drug}
+                onChange={createFilterStringHandler('drug')}
+                onKeyDown={createFilterHandler('drug')}
+              />
+            </TableCell>
+            <TableCell>
+              <input
+                type="text"
+                value={filterStrings.type}
+                onChange={createFilterStringHandler('type')}
+                onKeyDown={createFilterHandler('type')}
+              />
+            </TableCell>
+            <TableCell>
+              <input
+                type="text"
+                value={filterStrings.mechanism}
+                onChange={createFilterStringHandler('mechanism')}
+                onKeyDown={createFilterHandler('mechanism')}
+              />
+            </TableCell>
+            <TableCell>
+              <input
+                type="text"
+                value={filterStrings.activity}
+                onChange={createFilterStringHandler('activity')}
+                onKeyDown={createFilterHandler('activity')}
+              />
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
