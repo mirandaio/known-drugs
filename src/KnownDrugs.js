@@ -56,6 +56,21 @@ function KnownDrugs() {
     }
   };
 
+  const handlePhaseFilter = e => {
+    if (e.key === 'Enter') {
+      const newFilters = {
+        ...filters,
+        phase: Number(filterStrings.phase)
+      };
+
+      if (filterStrings.phase === '' || isNaN(newFilters.phase)) {
+        delete newFilters.phase
+      }
+
+      setFilters(newFilters);
+    }
+  };
+
   const createFilterStringHandler = property => e => {
     setFilterStrings({
       ...filterStrings,
@@ -159,7 +174,7 @@ function KnownDrugs() {
                 type="text"
                 value={filterStrings.phase}
                 onChange={createFilterStringHandler('phase')}
-                onKeyDown={createFilterHandler('phase')}
+                onKeyDown={handlePhaseFilter}
               />
             </TableCell>
             <TableCell>
