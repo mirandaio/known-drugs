@@ -4,7 +4,7 @@ import { HttpLink } from 'apollo-link-http';
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'https://known-drugs.herokuapp.com/graphql',
+    uri: process.env.REACT_APP_API_URL || 'http://localhost:4000'
   }),
   cache: new InMemoryCache()
 });
