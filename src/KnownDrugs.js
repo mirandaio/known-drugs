@@ -10,6 +10,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import KnownDrugsBody from './KnownDrugsBody';
 import KnownDrugsFooter from './KnownDrugsFooter';
+import SummaryPlots from './SummaryPlots';
 
 const NUM_ROWS = 10;
 
@@ -83,7 +84,9 @@ function KnownDrugs() {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <>
+      <SummaryPlots/>
+      <TableContainer component={Paper}>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -246,7 +249,8 @@ function KnownDrugs() {
           </TableRow>
         </TableFooter>
       </Table>
-    </TableContainer>
+      </TableContainer>
+    </>
   );
 }
 
