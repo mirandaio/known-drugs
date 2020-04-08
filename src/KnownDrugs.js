@@ -27,7 +27,7 @@ function KnownDrugs() {
     mechanism: '',
     activity: ''
   });
-  const [ filters, setFilters ] = useState({});
+  const [ filters, setFilters ] = useState([]);
 
   const createSortHandler = property => () => {
     setSort({
@@ -44,28 +44,19 @@ function KnownDrugs() {
 
   const createFilterHandler = property => e => {
     if (e.key === 'Enter') {
-      const newFilters = {
-        ...filters,
-        [property]: filterStrings[property]
-      };
+      const newFilters = [];
 
-      if (newFilters[property] === '') {
-        delete newFilters[property];
+      for (let i = 0; i < filters.length; i++) {
+        if (filters[i].filterBy !== property) {
+          newFilters.push(filters[i]);
+        }
       }
 
-      setFilters(newFilters);
-    }
-  };
-
-  const handlePhaseFilter = e => {
-    if (e.key === 'Enter') {
-      const newFilters = {
-        ...filters,
-        phase: Number(filterStrings.phase)
-      };
-
-      if (filterStrings.phase === '' || isNaN(newFilters.phase)) {
-        delete newFilters.phase
+      if (filterStrings[property] !== '') {
+        newFilters.push({
+          filterBy: property,
+          value: filterStrings[property]
+        });
       }
 
       setFilters(newFilters);
@@ -177,7 +168,7 @@ function KnownDrugs() {
                 type="text"
                 value={filterStrings.phase}
                 onChange={createFilterStringHandler('phase')}
-                onKeyDown={handlePhaseFilter}
+                onKeyDown={createFilterHandler('phase')}
               />
             </TableCell>
             <TableCell>

@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 });
 
 const KNOWN_DRUGS_QUERY = gql`
-  query KnownDrugs($page: Pagination! $sort: SortInput! $filters: Filters!) {
+  query KnownDrugs($page: Page! $sort: SortInput! $filters: [Filter!]) {
     knownDrugs(page: $page sort: $sort filters: $filters) {
       rows {
         disease

@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import TablePagination from '@material-ui/core/TablePagination';
 
 const TOTAL_QUERY = gql`
-  query Total($filters: Filters!) {
+  query Total($filters: [Filter!]) {
     knownDrugs(filters: $filters) {
       aggregations {
         filteredTotal
