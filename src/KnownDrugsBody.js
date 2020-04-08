@@ -4,6 +4,13 @@ import gql from 'graphql-tag';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  cell: {
+    padding: 0
+  }
+});
 
 const KNOWN_DRUGS_QUERY = gql`
   query KnownDrugs($page: Pagination! $sort: SortInput! $filters: Filters!) {
@@ -23,6 +30,7 @@ const KNOWN_DRUGS_QUERY = gql`
 `;
 
 const KnownDrugsBody = ({ pageIndex, sort, filters, size }) => {
+  const classes = useStyles();
   const { loading, error, data } = useQuery(KNOWN_DRUGS_QUERY, {
     variables: {
       page: { index: pageIndex, size },
@@ -38,28 +46,28 @@ const KnownDrugsBody = ({ pageIndex, sort, filters, size }) => {
   return rows.map((row, i) => {
     return (
       <TableRow key={i}>
-        <TableCell>
+        <TableCell className={classes.cell}>
           <Typography variant="caption">{row.disease}</Typography>
         </TableCell>
-        <TableCell>
+        <TableCell className={classes.cell}>
           <Typography variant="caption">{row.phase}</Typography>
         </TableCell>
-        <TableCell>
+        <TableCell className={classes.cell}>
           <Typography variant="caption">{row.status}</Typography>
         </TableCell>
-        <TableCell>
+        <TableCell className={classes.cell}>
           <Typography variant="caption">{row.source}</Typography>
         </TableCell>
-        <TableCell>
+        <TableCell className={classes.cell}>
           <Typography variant="caption">{row.drug}</Typography>
         </TableCell>
-        <TableCell>
+        <TableCell className={classes.cell}>
           <Typography variant="caption">{row.type}</Typography>
         </TableCell>
-        <TableCell>
+        <TableCell className={classes.cell}>
           <Typography variant="caption">{row.mechanism}</Typography>
         </TableCell>
-        <TableCell>
+        <TableCell className={classes.cell}>
           <Typography variant="caption">{row.activity}</Typography>
         </TableCell>
       </TableRow>
