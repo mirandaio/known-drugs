@@ -7,7 +7,7 @@ const TOTAL_QUERY = gql`
   query Total($filters: [Filter!]) {
     knownDrugs(filters: $filters) {
       aggregations {
-        filteredTotal
+        total
       }
     }
   }
@@ -27,7 +27,7 @@ const KnownDrugsFooter = ({ pageIndex, size, filters, onChangePage }) => {
   return (
     <TablePagination
       page={pageIndex}
-      count={aggregations.filteredTotal}
+      count={aggregations.total}
       rowsPerPage={size}
       rowsPerPageOptions={[]}
       onChangePage={(_, page) => onChangePage(page)}
