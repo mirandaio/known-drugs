@@ -76,7 +76,7 @@ function KnownDrugs() {
 
   return (
     <>
-      <SummaryPlots/>
+      <SummaryPlots filters={filters}/>
       <TableContainer component={Paper}>
       <Table size="small">
         <TableHead>
