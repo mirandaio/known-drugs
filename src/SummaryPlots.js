@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import PieChart from './PieChart';
 
 const AGGS_QUERY = gql`
@@ -32,7 +33,6 @@ const SummaryPlots = ({ filters }) => {
 
   if (loading || error) return null;
 
-  // console.log('data', data);
   const {
     uniqueDrugs,
     uniqueDiseases,
@@ -42,7 +42,7 @@ const SummaryPlots = ({ filters }) => {
   return (
     <Grid container>
       <Grid item md={4}>
-        <div>Summary</div>
+        <Typography variant="subtitle2">Summary</Typography>
         <div>
           <span>{uniqueDrugs}</span> unique drugs
         </div>
@@ -54,11 +54,15 @@ const SummaryPlots = ({ filters }) => {
         </div>
       </Grid>
       <Grid item md={4}>
-        <div>Unique drugs by type</div>
+        <Typography variant="subtitle2">
+          Unique drugs by type
+        </Typography>
         <PieChart data={uniqueDrugsByType}/>
       </Grid>
       <Grid item md={4}>
-        <div>Unique drugs by activity</div>
+        <Typography variant="subtitle2">
+          Unique drugs by activity
+        </Typography>
         <PieChart data={uniqueDrugsByActivity}/>
       </Grid>
     </Grid>
