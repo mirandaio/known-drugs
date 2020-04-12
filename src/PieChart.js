@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 
-const WIDTH = 240;
-const HEIGHT = 240;
+const WIDTH = 280;
+const HEIGHT = 280;
+const RADIUS = Math.min(WIDTH, HEIGHT) / 2 - 30;
+const LABEL_RADIUS = RADIUS * 0.65;
 
 class PieChart extends Component {
   svgRef = React.createRef();
+  chart = React.createRef();
+  labels = React.createRef();
   pie = d3.pie().sort(null).value(d => d.count);
-  arc = d3.arc().innerRadius(0).outerRadius(Math.min(WIDTH, HEIGHT) / 2 - 1);
+  arc = d3.arc().innerRadius(0).outerRadius(RADIUS);
+  arcLabel = d3.arc().innerRadius(LABEL_RADIUS).outerRadius(LABEL_RADIUS);
 
   componentDidMount() {
     this._render();
@@ -19,15 +24,14 @@ class PieChart extends Component {
 
   _render() {
     const { data } = this.props;
+
+    const arcs = this.pie(data);
     const color = d3.scaleOrdinal()
       .domain(data.map(d => d.name))
       .range(d3.schemePastel1);
 
-    const svg = d3.select(this.svgRef.current);
-    const chart = svg.select('g');
-
-    const arcs = this.pie(data);
-
+    const chart = d3.select(this.chart.current);
+    
     chart.attr('stroke', 'white')
     .selectAll('path')
     .data(arcs)
@@ -35,6 +39,18 @@ class PieChart extends Component {
     .attr('fill', d => color(d.data.category))
     .attr('d', this.arc);
 
+    const labels = d3.select(this.labels.current);
+
+    labels
+      .attr('font-family', 'sans-serif')
+      .attr('font-size', 10)
+      .attr('text-anchor', 'middle')
+      .selectAll('text')
+      .data(arcs)
+      .join('text')
+      .attr('transform', d => `translate(${this.arcLabel.centroid(d)})`)
+      .attr('y', '-0.4em')
+      .text(d => `${d.data.category} (${d.data.count})`);
   }
 
   render() {
@@ -46,7 +62,8 @@ class PieChart extends Component {
         viewBox={`${-WIDTH/2} ${-HEIGHT/2} ${WIDTH} ${HEIGHT}`}
         ref={this.svgRef}
       >
-        <g/>
+        <g ref={this.chart}/>
+        <g ref={this.labels}/>
       </svg>
     );
   }
