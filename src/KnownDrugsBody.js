@@ -16,14 +16,31 @@ const KNOWN_DRUGS_QUERY = gql`
   query KnownDrugs($page: Page! $sort: SortInput! $filters: [Filter!]) {
     knownDrugs(page: $page sort: $sort filters: $filters) {
       rows {
-        disease
-        phase
-        status
-        source
-        drug
-        type
-        mechanism
-        activity
+        disease {
+          id
+          name
+        }
+        target {
+          id
+          symbol
+        }
+        drug {
+          id
+          name
+          type
+          activity
+        }
+        clinicalTrial {
+          phase
+          status
+          sourceUrl
+          sourceName
+        }
+        mechanismOfAction {
+          name
+          sourceName
+          sourceUrl
+        }
       }
     }
   }
@@ -47,32 +64,32 @@ const KnownDrugsBody = ({ pageIndex, sort, filters, size }) => {
     return (
       <TableRow key={i}>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.disease}</Typography>
+          <Typography variant="caption">{row.disease.name}</Typography>
         </TableCell>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.phase}</Typography>
+          <Typography variant="caption">{row.clinicalTrial.phase}</Typography>
         </TableCell>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.status}</Typography>
+          <Typography variant="caption">{row.clinicalTrial.status}</Typography>
         </TableCell>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.source}</Typography>
+          <Typography variant="caption">{row.clinicalTrial.sourceName}</Typography>
         </TableCell>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.drug}</Typography>
+          <Typography variant="caption">{row.drug.name}</Typography>
         </TableCell>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.type}</Typography>
+          <Typography variant="caption">{row.drug.type}</Typography>
         </TableCell>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.mechanism}</Typography>
+          <Typography variant="caption">{row.mechanismOfAction.name}</Typography>
         </TableCell>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.activity}</Typography>
+          <Typography variant="caption">{row.drug.activity}</Typography>
         </TableCell>
       </TableRow>
     );
-  })
+  });
 };
 
 export default KnownDrugsBody;
