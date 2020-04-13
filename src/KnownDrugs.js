@@ -64,6 +64,7 @@ function KnownDrugs() {
       }
 
       setFilters(newFilters);
+      setPageIndex(0);
     }
   };
 
