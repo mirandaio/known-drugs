@@ -11,6 +11,7 @@ const AGGS_QUERY = gql`
       aggregations {
         uniqueDrugs
         uniqueDiseases
+        clinicalTrials
         uniqueDrugsByType {
           category
           count
@@ -36,6 +37,7 @@ const SummaryPlots = ({ filters }) => {
   const {
     uniqueDrugs,
     uniqueDiseases,
+    clinicalTrials,
     uniqueDrugsByType,
     uniqueDrugsByActivity
   } = data.knownDrugs.aggregations;
@@ -51,6 +53,9 @@ const SummaryPlots = ({ filters }) => {
         </div>
         <div>
           <span>{uniqueDiseases}</span> associated diseases
+        </div>
+        <div>
+          <span>{clinicalTrials}</span> clinical trials
         </div>
       </Grid>
       <Grid item md={4}>
