@@ -1,46 +1,16 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import PieChart from './PieChart';
 
-const AGGS_QUERY = gql`
-  query AGGREGATIONS($filters: [Filter!]) {
-    knownDrugs(filters: $filters) {
-      aggregations {
-        uniqueDrugs
-        uniqueDiseases
-        clinicalTrials
-        uniqueDrugsByType {
-          category
-          count
-        }
-        uniqueDrugsByActivity {
-          category
-          count
-        }
-      }
-    }
-  }
-`;
-
-const SummaryPlots = ({ filters }) => {
-  const { loading, error, data } = useQuery(AGGS_QUERY, {
-    variables: {
-      filters,
-    },
-  });
-
-  if (loading || error) return null;
-
+const SummaryPlots = ({ aggs }) => {
   const {
-    uniqueDrugs,
-    uniqueDiseases,
-    clinicalTrials,
-    uniqueDrugsByType,
-    uniqueDrugsByActivity,
-  } = data.knownDrugs.aggregations;
+    uniqueDrugs = 0,
+    uniqueDiseases = 0,
+    clinicalTrials = 0,
+    uniqueDrugsByType = [],
+    uniqueDrugsByActivity = [],
+  } = aggs;
   return (
     <Grid container>
       <Grid item md={4} sm={4}>
@@ -49,7 +19,7 @@ const SummaryPlots = ({ filters }) => {
           <span>{uniqueDrugs}</span> unique drugs
         </div>
         <div>
-          <span>1</span>associated targets
+          <span>1</span> associated targets
         </div>
         <div>
           <span>{uniqueDiseases}</span> associated diseases

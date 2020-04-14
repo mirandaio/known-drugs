@@ -1,35 +1,19 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
 import TablePagination from '@material-ui/core/TablePagination';
 
-const TOTAL_QUERY = gql`
-  query Total($filters: [Filter!]) {
-    knownDrugs(filters: $filters) {
-      aggregations {
-        total
-      }
-    }
-  }
-`;
-
-const KnownDrugsFooter = ({ pageIndex, size, filters, onChangePage }) => {
-  const { loading, error, data } = useQuery(TOTAL_QUERY, {
-    variables: {
-      filters,
-    },
-  });
-
-  if (loading || error) return null;
-
-  const { aggregations } = data.knownDrugs;
-
+const KnownDrugsFooter = ({
+  total = 0,
+  size,
+  pageIndex,
+  onChangePage,
+  loading,
+}) => {
   return (
     <TablePagination
       component="div"
-      page={pageIndex}
-      count={aggregations.total}
+      count={total}
       rowsPerPage={size}
+      page={pageIndex}
       rowsPerPageOptions={[]}
       onChangePage={(_, page) => onChangePage(page)}
     />

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import gql from 'graphql-tag';
 import Grid from '@material-ui/core/Grid';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
@@ -12,11 +13,62 @@ import Typography from '@material-ui/core/Typography';
 import KnownDrugsBody from './KnownDrugsBody';
 import KnownDrugsFooter from './KnownDrugsFooter';
 import SummaryPlots from './SummaryPlots';
+import client from './client';
 
 const NUM_ROWS = 10;
 
+const KNOWN_DRUGS_QUERY = gql`
+  query KnownDrugs($page: Page!, $sort: SortInput!, $filters: [Filter!]) {
+    knownDrugs(page: $page, sort: $sort, filters: $filters) {
+      aggregations {
+        total
+        uniqueDrugs
+        uniqueDiseases
+        clinicalTrials
+        uniqueDrugsByType {
+          category
+          count
+        }
+        uniqueDrugsByActivity {
+          category
+          count
+        }
+      }
+      rows {
+        disease {
+          id
+          name
+        }
+        target {
+          id
+          symbol
+        }
+        drug {
+          id
+          name
+          type
+          activity
+        }
+        clinicalTrial {
+          phase
+          status
+          sourceUrl
+          sourceName
+        }
+        mechanismOfAction {
+          name
+          sourceName
+          sourceUrl
+        }
+      }
+    }
+  }
+`;
+
 function KnownDrugs() {
   const [pageIndex, setPageIndex] = useState(0);
+  const [rows, setRows] = useState([]);
+  const [aggs, setAggs] = useState({});
   const [sort, setSort] = useState({ sortBy: 'disease', direction: 'asc' });
   const [filterStrings, setFilterStrings] = useState({
     disease: '',
@@ -29,6 +81,22 @@ function KnownDrugs() {
     activity: '',
   });
   const [filters, setFilters] = useState([]);
+
+  useEffect(() => {
+    client
+      .query({
+        query: KNOWN_DRUGS_QUERY,
+        variables: {
+          page: { index: pageIndex, size: NUM_ROWS },
+          sort,
+          filters,
+        },
+      })
+      .then((res) => {
+        setRows(res.data.knownDrugs.rows);
+        setAggs(res.data.knownDrugs.aggregations);
+      });
+  });
 
   const createSortHandler = (property) => () => {
     setSort({
@@ -91,7 +159,7 @@ function KnownDrugs() {
         </a>
       </Typography>
       <Grid item md={11} sm={12} xs={12}>
-        <SummaryPlots filters={filters} />
+        <SummaryPlots aggs={aggs} />
         <TableContainer component={Paper}>
           <Table size="small">
             <TableHead>
@@ -237,19 +305,14 @@ function KnownDrugs() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <KnownDrugsBody
-                pageIndex={pageIndex}
-                sort={sort}
-                filters={filters}
-                size={NUM_ROWS}
-              />
+              <KnownDrugsBody rows={rows} />
             </TableBody>
           </Table>
         </TableContainer>
         <KnownDrugsFooter
-          pageIndex={pageIndex}
+          total={aggs.total}
           size={NUM_ROWS}
-          filters={filters}
+          pageIndex={pageIndex}
           onChangePage={handleChangePage}
         />
       </Grid>
