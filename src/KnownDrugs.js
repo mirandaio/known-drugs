@@ -6,9 +6,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import TableFooter from '@material-ui/core/TableFooter';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import KnownDrugsBody from './KnownDrugsBody';
 import KnownDrugsFooter from './KnownDrugsFooter';
 import SummaryPlots from './SummaryPlots';
@@ -81,6 +81,9 @@ function KnownDrugs() {
 
   return (
     <Grid container justify="space-around">
+      <Typography variant="h5" gutterBottom>
+        Known drugs for ESR1
+      </Typography>
       <Grid item md={11}>
         <SummaryPlots filters={filters} />
         <TableContainer component={Paper}>
@@ -235,18 +238,14 @@ function KnownDrugs() {
                 size={NUM_ROWS}
               />
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <KnownDrugsFooter
-                  pageIndex={pageIndex}
-                  size={NUM_ROWS}
-                  filters={filters}
-                  onChangePage={handleChangePage}
-                />
-              </TableRow>
-            </TableFooter>
           </Table>
         </TableContainer>
+        <KnownDrugsFooter
+          pageIndex={pageIndex}
+          size={NUM_ROWS}
+          filters={filters}
+          onChangePage={handleChangePage}
+        />
       </Grid>
     </Grid>
   );

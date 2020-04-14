@@ -16,8 +16,8 @@ const TOTAL_QUERY = gql`
 const KnownDrugsFooter = ({ pageIndex, size, filters, onChangePage }) => {
   const { loading, error, data } = useQuery(TOTAL_QUERY, {
     variables: {
-      filters
-    }
+      filters,
+    },
   });
 
   if (loading || error) return null;
@@ -26,6 +26,7 @@ const KnownDrugsFooter = ({ pageIndex, size, filters, onChangePage }) => {
 
   return (
     <TablePagination
+      component="div"
       page={pageIndex}
       count={aggregations.total}
       rowsPerPage={size}

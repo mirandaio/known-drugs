@@ -8,13 +8,13 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   cell: {
-    padding: 0
-  }
+    padding: 0,
+  },
 });
 
 const KNOWN_DRUGS_QUERY = gql`
-  query KnownDrugs($page: Page! $sort: SortInput! $filters: [Filter!]) {
-    knownDrugs(page: $page sort: $sort filters: $filters) {
+  query KnownDrugs($page: Page!, $sort: SortInput!, $filters: [Filter!]) {
+    knownDrugs(page: $page, sort: $sort, filters: $filters) {
       rows {
         disease {
           id
@@ -52,19 +52,21 @@ const KnownDrugsBody = ({ pageIndex, sort, filters, size }) => {
     variables: {
       page: { index: pageIndex, size },
       sort,
-      filters
-    }
+      filters,
+    },
   });
 
   if (loading || error) return null;
-  
+
   const { rows } = data.knownDrugs;
 
   return rows.map((row, i) => {
     return (
       <TableRow key={i}>
-        <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.disease.name}</Typography>
+        <TableCell className={classes.cell} noWrap>
+          <Typography variant="caption" noWrap>
+            {row.disease.name}
+          </Typography>
         </TableCell>
         <TableCell className={classes.cell}>
           <Typography variant="caption">{row.clinicalTrial.phase}</Typography>
@@ -73,16 +75,22 @@ const KnownDrugsBody = ({ pageIndex, sort, filters, size }) => {
           <Typography variant="caption">{row.clinicalTrial.status}</Typography>
         </TableCell>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.clinicalTrial.sourceName}</Typography>
+          <Typography variant="caption">
+            {row.clinicalTrial.sourceName}
+          </Typography>
         </TableCell>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.drug.name}</Typography>
+          <Typography variant="caption" noWrap>
+            {row.drug.name}
+          </Typography>
         </TableCell>
         <TableCell className={classes.cell}>
           <Typography variant="caption">{row.drug.type}</Typography>
         </TableCell>
         <TableCell className={classes.cell}>
-          <Typography variant="caption">{row.mechanismOfAction.name}</Typography>
+          <Typography variant="caption" noWrap>
+            {row.mechanismOfAction.name}
+          </Typography>
         </TableCell>
         <TableCell className={classes.cell}>
           <Typography variant="caption">{row.drug.activity}</Typography>
