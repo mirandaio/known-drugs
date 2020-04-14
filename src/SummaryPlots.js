@@ -28,8 +28,8 @@ const AGGS_QUERY = gql`
 const SummaryPlots = ({ filters }) => {
   const { loading, error, data } = useQuery(AGGS_QUERY, {
     variables: {
-      filters
-    }
+      filters,
+    },
   });
 
   if (loading || error) return null;
@@ -39,11 +39,11 @@ const SummaryPlots = ({ filters }) => {
     uniqueDiseases,
     clinicalTrials,
     uniqueDrugsByType,
-    uniqueDrugsByActivity
+    uniqueDrugsByActivity,
   } = data.knownDrugs.aggregations;
   return (
     <Grid container>
-      <Grid item md={4}>
+      <Grid item md={4} sm={4}>
         <Typography variant="subtitle2">Summary</Typography>
         <div>
           <span>{uniqueDrugs}</span> unique drugs
@@ -58,17 +58,13 @@ const SummaryPlots = ({ filters }) => {
           <span>{clinicalTrials}</span> clinical trials
         </div>
       </Grid>
-      <Grid item md={4}>
-        <Typography variant="subtitle2">
-          Unique drugs by type
-        </Typography>
-        <PieChart data={uniqueDrugsByType}/>
+      <Grid item md={4} sm={4}>
+        <Typography variant="subtitle2">Unique drugs by type</Typography>
+        <PieChart data={uniqueDrugsByType} />
       </Grid>
-      <Grid item md={4}>
-        <Typography variant="subtitle2">
-          Unique drugs by activity
-        </Typography>
-        <PieChart data={uniqueDrugsByActivity}/>
+      <Grid item md={4} sm={4}>
+        <Typography variant="subtitle2">Unique drugs by activity</Typography>
+        <PieChart data={uniqueDrugsByActivity} />
       </Grid>
     </Grid>
   );

@@ -84,7 +84,13 @@ function KnownDrugs() {
       <Typography variant="h5" gutterBottom>
         Known drugs for ESR1
       </Typography>
-      <Grid item md={11}>
+      <Typography>
+        Back end schema:{' '}
+        <a href="https://known-drugs.herokuapp.com/graphql">
+          https://known-drugs.herokuapp.com/graphql
+        </a>
+      </Typography>
+      <Grid item md={11} sm={12} xs={12}>
         <SummaryPlots filters={filters} />
         <TableContainer component={Paper}>
           <Table size="small">
