@@ -8,6 +8,7 @@ const KnownDrugsFooter = ({
   onChangePage,
   loading,
 }) => {
+  const lastPageIndex = Math.floor(total / size);
   return (
     <TablePagination
       component="div"
@@ -16,8 +17,8 @@ const KnownDrugsFooter = ({
       page={pageIndex}
       rowsPerPageOptions={[]}
       onChangePage={(_, page) => onChangePage(page)}
-      backIconButtonProps={{ disabled: loading }}
-      nextIconButtonProps={{ disabled: loading }}
+      backIconButtonProps={{ disabled: loading || pageIndex === 0 }}
+      nextIconButtonProps={{ disabled: loading || pageIndex === lastPageIndex }}
     />
   );
 };
