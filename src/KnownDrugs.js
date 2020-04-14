@@ -220,9 +220,9 @@ function KnownDrugs() {
                 </TableCell>
                 <TableCell>
                   <TableSortLabel
-                    active={sort.sortBy === 'mechanism'}
+                    active={sort.sortBy === 'mechanismOfAction'}
                     direction={sort.direction}
-                    onClick={createSortHandler('mechanism')}
+                    onClick={createSortHandler('mechanismOfAction')}
                   >
                     Mechanism of Action
                   </TableSortLabel>
