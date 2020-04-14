@@ -66,6 +66,7 @@ const KNOWN_DRUGS_QUERY = gql`
 `;
 
 function KnownDrugs() {
+  const [loading, setLoading] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [rows, setRows] = useState([]);
   const [aggs, setAggs] = useState({});
@@ -83,6 +84,7 @@ function KnownDrugs() {
   const [filters, setFilters] = useState([]);
 
   useEffect(() => {
+    setLoading(true);
     client
       .query({
         query: KNOWN_DRUGS_QUERY,
@@ -95,8 +97,9 @@ function KnownDrugs() {
       .then((res) => {
         setRows(res.data.knownDrugs.rows);
         setAggs(res.data.knownDrugs.aggregations);
+        setLoading(false);
       });
-  });
+  }, [pageIndex, sort, filters]);
 
   const createSortHandler = (property) => () => {
     setSort({
@@ -314,6 +317,7 @@ function KnownDrugs() {
           size={NUM_ROWS}
           pageIndex={pageIndex}
           onChangePage={handleChangePage}
+          loading={loading}
         />
       </Grid>
     </Grid>

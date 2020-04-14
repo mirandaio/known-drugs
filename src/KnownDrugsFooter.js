@@ -16,6 +16,8 @@ const KnownDrugsFooter = ({
       page={pageIndex}
       rowsPerPageOptions={[]}
       onChangePage={(_, page) => onChangePage(page)}
+      backIconButtonProps={{ disabled: loading }}
+      nextIconButtonProps={{ disabled: loading }}
     />
   );
 };
