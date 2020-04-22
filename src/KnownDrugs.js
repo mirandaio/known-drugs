@@ -78,7 +78,7 @@ function KnownDrugs() {
     source: '',
     drug: '',
     type: '',
-    mechanism: '',
+    mechanismOfAction: '',
     activity: '',
   });
   const [filters, setFilters] = useState([]);
@@ -293,8 +293,8 @@ function KnownDrugs() {
                   <input
                     type="text"
                     value={filterStrings.mechanism}
-                    onChange={createFilterStringHandler('mechanism')}
-                    onKeyDown={createFilterHandler('mechanism')}
+                    onChange={createFilterStringHandler('mechanismOfAction')}
+                    onKeyDown={createFilterHandler('mechanismOfAction')}
                   />
                 </TableCell>
                 <TableCell>
